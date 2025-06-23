@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: build/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://DND:password@db:5432/DND?sslmode=disable
+      - DATABASE_HOST=postgres
+      - DATABASE_USER=DND
+      - DATABASE_PASSWORD=password
+      - DATABASE_PORT=5432
+      - DATABASE_SSL=false
+      - DATABASE_NAME=db
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: DND
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: DND
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U DND"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db_data:
