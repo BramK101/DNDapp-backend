@@ -18,6 +18,7 @@ services:
       - DATABASE_PORT=5432
       - DATABASE_SSL=false
       - DATABASE_NAME=db
+      - RESET_DATABASE=false
 
   db:
     image: postgres:latest

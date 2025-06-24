@@ -32,7 +32,7 @@ func main() {
     // userHandler := handlers.NewUserHandler(userService)
     allHandlers := handlers.NewHandlers(allServices)
 
-    if err := db.CreateTables(); err != nil {
+    if err := db.CreateTables(cfg); err != nil {
         log.Fatal("Failed to create tables:", err)
     }
     
