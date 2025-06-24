@@ -40,7 +40,6 @@ func (h *Handlers) getUser(w http.ResponseWriter, r *http.Request) {
         return
     }
     
-    // Extract ID from URL path (simplified)
     idStr := r.URL.Path[len("/users/"):]
     id, err := strconv.Atoi(idStr)
     if err != nil {

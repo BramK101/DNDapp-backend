@@ -12,7 +12,7 @@ func (h *Handlers) loginHandler(w http.ResponseWriter, r *http.Request) {
 	var req models.LoginRequest
 	json.NewDecoder(r.Body).Decode(&req)
 
-	// Validate credentials (check against database)
+	
 	user, valid := h.Services.ValidateUser(req.Username, req.Password)
 	if !valid {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)

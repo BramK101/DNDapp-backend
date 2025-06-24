@@ -1,0 +1,39 @@
+package middleware
+
+import (
+	"context"
+	"net/http"
+	"strings"
+
+	"github.com/golang-jwt/jwt"
+)
+
+type contextKey string
+
+func Auth(next http.HandlerFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" {
+			http.Error(w, "Missing token", http.StatusUnauthorized)
+			return
+		}
+
+		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			return []byte("your-secret-key"), nil
+		})
+
+		if err != nil || !token.Valid {
+			http.Error(w, "Invalid token", http.StatusUnauthorized)
+			return
+		}
+
+		// Extract user ID from token
+		claims := token.Claims.(jwt.MapClaims)
+		userID := claims["user_id"].(float64)
+
+		// Add user ID to request context
+		ctx := context.WithValue(r.Context(), contextKey("user_id"), uint(userID))
+		next.ServeHTTP(w, r.WithContext(ctx))
+	}
+}
