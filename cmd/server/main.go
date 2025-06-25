@@ -20,16 +20,8 @@ func main() {
     }
     defer db.Close()
 
-    // Run migrations
-    
-    
-    // Initialize services
-    // userService := services.NewUserService(db)
-
     allServices := services.NewServices(db)
     
-    // Initialize handlers
-    // userHandler := handlers.NewUserHandler(userService)
     allHandlers := handlers.NewHandlers(allServices)
 
     if err := db.CreateTables(cfg); err != nil {
@@ -39,5 +31,5 @@ func main() {
     // Start server (simplified)
     log.Println("Server starting on :8080")
     // userHandler.SetupRoutes()
-    allHandlers.SetupRoutes()
+    allHandlers.SetupRoutes(cfg)
 }

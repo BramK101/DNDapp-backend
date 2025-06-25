@@ -29,7 +29,11 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		// Extract user ID from token
-		claims := token.Claims.(jwt.MapClaims)
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			http.Error(w, "Invalid token claims", http.StatusUnauthorized)
+			return
+		}
 		userID := claims["user_id"].(float64)
 
 		// Add user ID to request context

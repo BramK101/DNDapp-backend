@@ -13,15 +13,15 @@ type Config struct {
 }
 
 func Load() *Config {
-    resetDatabse, err := strconv.ParseBool(getEnv("RESET_DATABASE", "true"))
+    resetDatabase, err := strconv.ParseBool(getEnv("RESET_DATABASE", "true"))
     if err != nil {
-        log.Fatal("RESET_DATABSE is not a boolean:", err)
+        log.Fatal("RESET_DATABASE is not a boolean:", err)
     }
 
     return &Config{
         DatabaseURL: getEnv("DATABASE_URL", "postgres://user:password@db:5432/DND?sslmode=disable"),
-        Port:        getEnv("PORT", "8080"),
-        ResetDatabase: resetDatabse,
+        Port:        getEnv("PORT", ":8080"),
+        ResetDatabase: resetDatabase,
     }
 }
 

@@ -10,10 +10,12 @@ import (
 
 func (h *Handlers) loginHandler(w http.ResponseWriter, r *http.Request) {
 	var req models.LoginRequest
-	json.NewDecoder(r.Body).Decode(&req)
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
 
-	
-	user, valid := h.Services.ValidateUser(req.Username, req.Password)
+	user, valid := h.Services.ValidateUser(req.Email, req.Password)
 	if !valid {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		return

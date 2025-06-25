@@ -12,13 +12,13 @@ services:
         condition: service_healthy
     environment:
       - DATABASE_URL=postgres://DND:password@db:5432/DND?sslmode=disable
-      - DATABASE_HOST=postgres
+      - DATABASE_HOST=db
       - DATABASE_USER=DND
       - DATABASE_PASSWORD=password
       - DATABASE_PORT=5432
       - DATABASE_SSL=false
       - DATABASE_NAME=db
-      - RESET_DATABASE=false
+      - RESET_DATABASE=true
 
   db:
     image: postgres:latest

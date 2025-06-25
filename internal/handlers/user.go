@@ -14,7 +14,7 @@ func (h *Handlers) createUser(w http.ResponseWriter, r *http.Request) {
     }
     
     var req struct {
-        Name  string `json:"name"`
+        Username  string `json:"username"`
         Email string `json:"email"`
         Password string `json:"password"`
     }
@@ -24,7 +24,7 @@ func (h *Handlers) createUser(w http.ResponseWriter, r *http.Request) {
         return
     }
     
-    user, err := h.Services.CreateUser(req.Name, req.Email, req.Password)
+    user, err := h.Services.CreateUser(req.Username, req.Email, req.Password)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
