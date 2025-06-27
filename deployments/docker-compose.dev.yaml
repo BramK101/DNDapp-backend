@@ -16,9 +16,8 @@ services:
       - DATABASE_USER=DND
       - DATABASE_PASSWORD=password
       - DATABASE_PORT=5432
-      - DATABASE_SSL=false
-      - DATABASE_NAME=db
-      - RESET_DATABASE=true
+      - DATABASE_SSL=disable
+      - DATABASE_NAME=DND
 
   db:
     image: postgres:latest

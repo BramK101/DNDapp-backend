@@ -1,11 +1,13 @@
 package services
 
-import "github.com/BramK101/DNDapp-backend/internal/database"
+import (
+	"gorm.io/gorm"
+)
 
 type Services struct {
-    db *database.DB
+	db *gorm.DB
 }
 
-func NewServices(db *database.DB) *Services {
+func NewServices(db *gorm.DB) *Services {
 	return &Services{db: db}
 }

@@ -10,15 +10,15 @@ import (
 )
 
 func (h *Handlers) SetupRoutes(cfg *config.Config) {
-    http.HandleFunc("/register", middleware.CORS(h.createUser))
-    http.HandleFunc("/users/", middleware.CORS(middleware.Auth(h.getUser)))
+	http.HandleFunc("/register", middleware.CORS(h.createUser))
+	http.HandleFunc("/users/", middleware.CORS(middleware.Auth(h.getUser)))
 	http.HandleFunc("/login", middleware.CORS(h.loginHandler))
-    
-    log.Fatal(http.ListenAndServe(cfg.Port, nil))
+
+	log.Fatal(http.ListenAndServe(cfg.UrlPort, nil))
 }
 
 type Handlers struct {
-    Services *services.Services
+	Services *services.Services
 }
 
 func NewHandlers(Services *services.Services) *Handlers {

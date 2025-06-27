@@ -1,35 +1,44 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/BramK101/DNDapp-backend/internal/config"
-	"github.com/BramK101/DNDapp-backend/internal/database"
 	"github.com/BramK101/DNDapp-backend/internal/handlers"
+	"github.com/BramK101/DNDapp-backend/internal/models"
 	"github.com/BramK101/DNDapp-backend/internal/services"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func main() {
-    // Load configuration
-    cfg := config.Load()
-    
-    // Initialize database
-    db, err := database.NewConnection(cfg.DatabaseURL)
-    if err != nil {
-        log.Fatal("Failed to connect to database:", err)
-    }
-    defer db.Close()
+	// Load configuration
+	cfg := config.Load()
 
-    allServices := services.NewServices(db)
-    
-    allHandlers := handlers.NewHandlers(allServices)
+	dsn := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		cfg.DatabaseHost,
+		cfg.DatabaseUser,
+		cfg.DatabasePassword,
+		cfg.DatabaseName,
+		cfg.DatabasePort,
+		cfg.DatabaseSSL,
+	)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
 
-    if err := db.CreateTables(cfg); err != nil {
-        log.Fatal("Failed to create tables:", err)
-    }
-    
-    // Start server (simplified)
-    log.Println("Server starting on :8080")
-    // userHandler.SetupRoutes()
-    allHandlers.SetupRoutes(cfg)
+	//TODO: hardcoded. ga dit doen voor alle
+	db.AutoMigrate(&models.User{})
+
+	allServices := services.NewServices(db)
+
+	allHandlers := handlers.NewHandlers(allServices)
+
+	// Start server (simplified)
+	log.Println("Server starting on ", cfg.UrlPort)
+	// userHandler.SetupRoutes()
+	allHandlers.SetupRoutes(cfg)
 }

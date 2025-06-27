@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"strings"
 
@@ -24,6 +25,7 @@ func Auth(next http.HandlerFunc) http.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
+			log.Print(err)
 			http.Error(w, "Invalid token", http.StatusUnauthorized)
 			return
 		}

@@ -1,33 +1,37 @@
 package config
 
 import (
-	"log"
 	"os"
-	"strconv"
 )
 
 type Config struct {
-    DatabaseURL string
-    ResetDatabase bool
-    Port        string
+	DatabaseURL      string
+	DatabaseHost     string
+	DatabaseUser     string
+	DatabasePassword string
+	DatabasePort     string
+	DatabaseSSL      string
+	DatabaseName     string
+	ResetDatabase    bool
+	UrlPort          string
 }
 
 func Load() *Config {
-    resetDatabase, err := strconv.ParseBool(getEnv("RESET_DATABASE", "true"))
-    if err != nil {
-        log.Fatal("RESET_DATABASE is not a boolean:", err)
-    }
-
-    return &Config{
-        DatabaseURL: getEnv("DATABASE_URL", "postgres://user:password@db:5432/DND?sslmode=disable"),
-        Port:        getEnv("PORT", ":8080"),
-        ResetDatabase: resetDatabase,
-    }
+	return &Config{
+		DatabaseURL:      getEnv("DATABASE_URL", "postgres://user:password@db:5432/DND?sslmode=disable"),
+		DatabaseHost:     getEnv("DATABASE_HOST", "db"),
+		DatabaseUser:     getEnv("DATABASE_USER", "DND"),
+		DatabasePassword: getEnv("DATABASE_PASSWORD", "password"),
+		DatabasePort:     getEnv("DATABASE_PORT", "5432"),
+		DatabaseSSL:      getEnv("DATABASE_SSL", "false"),
+		DatabaseName:     getEnv("DATABASE_NAME", "db"),
+		UrlPort:          getEnv("PORT", ":8080"),
+	}
 }
 
 func getEnv(key, defaultValue string) string {
-    if value := os.Getenv(key); value != "" {
-        return value
-    }
-    return defaultValue
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
 }

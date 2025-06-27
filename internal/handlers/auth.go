@@ -20,7 +20,7 @@ func (h *Handlers) loginHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
 		return
 	}
-	token, err := utils.GenerateJWT(uint(user.ID))
+	token, err := utils.GenerateJWT(uint(user.ID), user.Email)
 	if err != nil {
 		http.Error(w, "Token generation failed", http.StatusInternalServerError)
 		return
